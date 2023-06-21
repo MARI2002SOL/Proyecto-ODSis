@@ -1,0 +1,2 @@
+C:\Users\locas\source\repos\Proyecto ODSis\Proyecto ODSis\x64\Debug\Proyecto ODSis.vcxproj.AssemblyReference.cache
+C:\Users\locas\source\repos\Proyecto ODSis\Proyecto ODSis\x64\Debug\Proyecto ODSis.vcxproj.SuggestedBindingRedirects.cache
