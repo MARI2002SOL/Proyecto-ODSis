@@ -1,5 +1,5 @@
 #pragma once
-
+#include "MenuOpciones.h"
 namespace ProyectoODSis {
 
 	using namespace System;
@@ -77,7 +77,7 @@ namespace ProyectoODSis {
 			this->tb_username->ForeColor = System::Drawing::Color::WhiteSmoke;
 			this->tb_username->Location = System::Drawing::Point(12, 135);
 			this->tb_username->Name = L"tb_username";
-			this->tb_username->Size = System::Drawing::Size(122, 15);
+			this->tb_username->Size = System::Drawing::Size(122, 19);
 			this->tb_username->TabIndex = 0;
 			// 
 			// tb_password
@@ -88,7 +88,7 @@ namespace ProyectoODSis {
 			this->tb_password->Location = System::Drawing::Point(12, 194);
 			this->tb_password->Name = L"tb_password";
 			this->tb_password->PasswordChar = '*';
-			this->tb_password->Size = System::Drawing::Size(122, 15);
+			this->tb_password->Size = System::Drawing::Size(122, 19);
 			this->tb_password->TabIndex = 1;
 			this->tb_password->UseSystemPasswordChar = true;
 			// 
@@ -101,7 +101,7 @@ namespace ProyectoODSis {
 			this->label1->ForeColor = System::Drawing::Color::WhiteSmoke;
 			this->label1->Location = System::Drawing::Point(120, 32);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(288, 39);
+			this->label1->Size = System::Drawing::Size(359, 49);
 			this->label1->TabIndex = 2;
 			this->label1->Text = L"Bienvenido a ODSis";
 			// 
@@ -143,6 +143,7 @@ namespace ProyectoODSis {
 			this->b_login->TabIndex = 5;
 			this->b_login->Text = L"Login";
 			this->b_login->UseVisualStyleBackColor = false;
+			this->b_login->Click += gcnew System::EventHandler(this, &Login::b_login_Click);
 			// 
 			// b_exit
 			// 
@@ -172,6 +173,7 @@ namespace ProyectoODSis {
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->tb_password);
 			this->Controls->Add(this->tb_username);
+			this->DoubleBuffered = true;
 			this->Font = (gcnew System::Drawing::Font(L"Corbel", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
@@ -183,5 +185,11 @@ namespace ProyectoODSis {
 
 		}
 #pragma endregion
-	};
+	private: System::Void b_login_Click(System::Object^ sender, System::EventArgs^ e) {
+		ProyectoODSis::MenuOpciones^ menuOpciones = gcnew ProyectoODSis::MenuOpciones();
+		this->Visible = false;	
+		menuOpciones->ShowDialog();
+		this->Visible = true;
+	}
+};
 }

@@ -114,7 +114,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Donaciones.cpp" />
+    <ClCompile Include="Inventario.cpp" />
     <ClCompile Include="Login.cpp" />
+    <ClCompile Include="MenuOpciones.cpp" />
+    <ClCompile Include="Proyectos.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -124,13 +128,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Donaciones.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="Inventario.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Login.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="MenuOpciones.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="Proyectos.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Donaciones.resx">
+      <DependentUpon>Donaciones.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Inventario.resx">
+      <DependentUpon>Inventario.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MenuOpciones.resx">
+      <DependentUpon>MenuOpciones.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proyectos.resx">
+      <DependentUpon>Proyectos.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

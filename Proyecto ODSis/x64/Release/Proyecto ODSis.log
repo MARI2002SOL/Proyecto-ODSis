@@ -1,3 +1,9 @@
-﻿  Login.cpp
-  Login.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
-  Proyecto ODSis.vcxproj -> C:\Users\locas\source\repos\Proyecto ODSis\x64\Release\Proyecto ODSis.exe
+﻿  Donaciones.cpp
+  Inventario.cpp
+  Login.cpp
+  MenuOpciones.cpp
+  Proyectos.cpp
+  .NETFramework,Version=v4.8.AssemblyAttributes.cpp
+  Generando código...
+  Donaciones.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
+  Proyecto ODSis.vcxproj -> C:\Users\FERNANDO\source\repos\Proyecto-ODSis\x64\Release\Proyecto ODSis.exe
