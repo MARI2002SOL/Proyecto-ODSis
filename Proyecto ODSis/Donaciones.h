@@ -18,9 +18,6 @@ namespace ProyectoODSis {
 		Donaciones(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: agregar código de constructor aquí
-			//
 		}
 
 	protected:

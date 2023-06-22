@@ -21,13 +21,12 @@ namespace ProyectoODSis {
 	{
 	private:
 		MYSQL* conn = mysql_init(0);
+		bool dragging = false;
+		Point offset;
 	public:
 		Login(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: agregar código de constructor aquí
-			//
 		}
 
 	protected:
@@ -84,20 +83,23 @@ namespace ProyectoODSis {
 			this->tb_username->ForeColor = System::Drawing::Color::WhiteSmoke;
 			this->tb_username->Location = System::Drawing::Point(12, 135);
 			this->tb_username->Name = L"tb_username";
-			this->tb_username->Size = System::Drawing::Size(122, 19);
+			this->tb_username->Size = System::Drawing::Size(122, 15);
 			this->tb_username->TabIndex = 0;
+			this->tb_username->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &Login::tb_username_KeyPress);
 			// 
 			// tb_password
 			// 
 			this->tb_password->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(142)),
 				static_cast<System::Int32>(static_cast<System::Byte>(208)));
 			this->tb_password->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->tb_password->ForeColor = System::Drawing::Color::WhiteSmoke;
 			this->tb_password->Location = System::Drawing::Point(12, 194);
 			this->tb_password->Name = L"tb_password";
 			this->tb_password->PasswordChar = '*';
-			this->tb_password->Size = System::Drawing::Size(122, 19);
+			this->tb_password->Size = System::Drawing::Size(122, 15);
 			this->tb_password->TabIndex = 1;
 			this->tb_password->UseSystemPasswordChar = true;
+			this->tb_password->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &Login::tb_password_KeyPress);
 			// 
 			// label1
 			// 
@@ -108,7 +110,7 @@ namespace ProyectoODSis {
 			this->label1->ForeColor = System::Drawing::Color::WhiteSmoke;
 			this->label1->Location = System::Drawing::Point(120, 32);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(359, 49);
+			this->label1->Size = System::Drawing::Size(288, 39);
 			this->label1->TabIndex = 2;
 			this->label1->Text = L"Bienvenido a ODSis";
 			// 
@@ -166,6 +168,7 @@ namespace ProyectoODSis {
 			this->b_exit->TabIndex = 6;
 			this->b_exit->Text = L"Exit";
 			this->b_exit->UseVisualStyleBackColor = false;
+			this->b_exit->Click += gcnew System::EventHandler(this, &Login::b_exit_Click);
 			// 
 			// Login
 			// 
@@ -187,6 +190,9 @@ namespace ProyectoODSis {
 			this->Name = L"Login";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Login";
+			this->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &Login::Login_MouseDown);
+			this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &Login::Login_MouseMove);
+			this->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &Login::Login_MouseUp);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -230,14 +236,39 @@ namespace ProyectoODSis {
 		MYSQL_RES* res = mysql_store_result(conn);
 		if (mysql_num_rows(res) > 0) {
 			MessageBox::Show("Login exitoso", "Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
-			// Abrir el formulario principal
 			this->Hide();
 			Form^ menu = gcnew ProyectoODSis::MenuOpciones();
 			menu->ShowDialog();
-			this->Close();
 		}
 		else {
 			MessageBox::Show("Invalid username or password!", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
+	}
+	private: System::Void b_exit_Click(System::Object^ sender, System::EventArgs^ e) {
+		Application::Exit();
+	}
+	private: System::Void Login_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		if (dragging) {
+			Point currentScreenPos = PointToScreen(Point(e->X, e->Y));
+			Location = Point(currentScreenPos.X - offset.X, currentScreenPos.Y - offset.Y);
+		}
+	}
+	private: System::Void Login_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		dragging = true;
+		offset.X = e->X;
+		offset.Y = e->Y;
+	}
+	private: System::Void Login_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		dragging = false;
+	}
+	private: System::Void tb_username_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+		if (e->KeyChar == (char)Keys::Enter) {
+			tb_password->Focus();
+		}
+	}
+	private: System::Void tb_password_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+		if (e->KeyChar == (char)Keys::Enter) {
+			b_login->PerformClick();
 		}
 	}
 	};

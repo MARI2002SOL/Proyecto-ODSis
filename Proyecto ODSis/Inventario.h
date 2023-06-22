@@ -18,9 +18,6 @@ namespace ProyectoODSis {
 		Inventario(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: agregar código de constructor aquí
-			//
 		}
 
 	protected:

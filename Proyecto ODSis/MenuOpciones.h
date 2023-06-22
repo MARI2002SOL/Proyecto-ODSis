@@ -1,7 +1,12 @@
+#pragma once
+
+#include <mysql.h>
+
 #include "Donaciones.h"
 #include "Inventario.h"
 #include "Proyectos.h"
-#pragma once
+
+using namespace ProyectoODSis;
 
 namespace ProyectoODSis {
 
@@ -17,13 +22,14 @@ namespace ProyectoODSis {
 	/// </summary>
 	public ref class MenuOpciones : public System::Windows::Forms::Form
 	{
+	private:
+		MYSQL* conn;
+		bool dragging = false;
+		Point offset;
 	public:
 		MenuOpciones(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: agregar código de constructor aquí
-			//
 		}
 
 	protected:
@@ -52,7 +58,7 @@ namespace ProyectoODSis {
 		/// <summary>
 		/// Variable del diseñador necesaria.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -83,17 +89,22 @@ namespace ProyectoODSis {
 			this->panelLateral->Controls->Add(this->margenTop);
 			this->panelLateral->Dock = System::Windows::Forms::DockStyle::Left;
 			this->panelLateral->Location = System::Drawing::Point(0, 0);
+			this->panelLateral->Margin = System::Windows::Forms::Padding(2);
 			this->panelLateral->Name = L"panelLateral";
-			this->panelLateral->Size = System::Drawing::Size(308, 631);
+			this->panelLateral->Size = System::Drawing::Size(231, 513);
 			this->panelLateral->TabIndex = 0;
+			this->panelLateral->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MenuOpciones::panelLateral_MouseDown);
+			this->panelLateral->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MenuOpciones::panelLateral_MouseMove);
+			this->panelLateral->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MenuOpciones::panelLateral_MouseUp);
 			// 
 			// btnSalir
 			// 
 			this->btnSalir->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->btnSalir->Dock = System::Windows::Forms::DockStyle::Top;
-			this->btnSalir->Location = System::Drawing::Point(0, 303);
+			this->btnSalir->Location = System::Drawing::Point(0, 246);
+			this->btnSalir->Margin = System::Windows::Forms::Padding(2);
 			this->btnSalir->Name = L"btnSalir";
-			this->btnSalir->Size = System::Drawing::Size(308, 63);
+			this->btnSalir->Size = System::Drawing::Size(231, 51);
 			this->btnSalir->TabIndex = 4;
 			this->btnSalir->Text = L"Salir";
 			this->btnSalir->UseVisualStyleBackColor = true;
@@ -103,9 +114,10 @@ namespace ProyectoODSis {
 			// 
 			this->btnProyectos->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->btnProyectos->Dock = System::Windows::Forms::DockStyle::Top;
-			this->btnProyectos->Location = System::Drawing::Point(0, 240);
+			this->btnProyectos->Location = System::Drawing::Point(0, 195);
+			this->btnProyectos->Margin = System::Windows::Forms::Padding(2);
 			this->btnProyectos->Name = L"btnProyectos";
-			this->btnProyectos->Size = System::Drawing::Size(308, 63);
+			this->btnProyectos->Size = System::Drawing::Size(231, 51);
 			this->btnProyectos->TabIndex = 3;
 			this->btnProyectos->Text = L"Proyectos";
 			this->btnProyectos->UseVisualStyleBackColor = true;
@@ -115,9 +127,10 @@ namespace ProyectoODSis {
 			// 
 			this->btnInventario->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->btnInventario->Dock = System::Windows::Forms::DockStyle::Top;
-			this->btnInventario->Location = System::Drawing::Point(0, 177);
+			this->btnInventario->Location = System::Drawing::Point(0, 144);
+			this->btnInventario->Margin = System::Windows::Forms::Padding(2);
 			this->btnInventario->Name = L"btnInventario";
-			this->btnInventario->Size = System::Drawing::Size(308, 63);
+			this->btnInventario->Size = System::Drawing::Size(231, 51);
 			this->btnInventario->TabIndex = 2;
 			this->btnInventario->Text = L"Inventario";
 			this->btnInventario->UseVisualStyleBackColor = true;
@@ -127,9 +140,10 @@ namespace ProyectoODSis {
 			// 
 			this->btnDonaciones->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->btnDonaciones->Dock = System::Windows::Forms::DockStyle::Top;
-			this->btnDonaciones->Location = System::Drawing::Point(0, 114);
+			this->btnDonaciones->Location = System::Drawing::Point(0, 93);
+			this->btnDonaciones->Margin = System::Windows::Forms::Padding(2);
 			this->btnDonaciones->Name = L"btnDonaciones";
-			this->btnDonaciones->Size = System::Drawing::Size(308, 63);
+			this->btnDonaciones->Size = System::Drawing::Size(231, 51);
 			this->btnDonaciones->TabIndex = 1;
 			this->btnDonaciones->Text = L"Donaciones";
 			this->btnDonaciones->UseVisualStyleBackColor = true;
@@ -140,8 +154,9 @@ namespace ProyectoODSis {
 			this->margenTop->Controls->Add(this->label1);
 			this->margenTop->Dock = System::Windows::Forms::DockStyle::Top;
 			this->margenTop->Location = System::Drawing::Point(0, 0);
+			this->margenTop->Margin = System::Windows::Forms::Padding(2);
 			this->margenTop->Name = L"margenTop";
-			this->margenTop->Size = System::Drawing::Size(308, 114);
+			this->margenTop->Size = System::Drawing::Size(231, 93);
 			this->margenTop->TabIndex = 0;
 			// 
 			// label1
@@ -149,9 +164,10 @@ namespace ProyectoODSis {
 			this->label1->AutoSize = true;
 			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Yi Baiti", 22.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label1->Location = System::Drawing::Point(66, 42);
+			this->label1->Location = System::Drawing::Point(50, 34);
+			this->label1->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(174, 37);
+			this->label1->Size = System::Drawing::Size(140, 30);
 			this->label1->TabIndex = 0;
 			this->label1->Text = L"OPCIONES";
 			this->label1->Click += gcnew System::EventHandler(this, &MenuOpciones::label1_Click);
@@ -160,19 +176,24 @@ namespace ProyectoODSis {
 			// 
 			this->panelContenedor->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->panelContenedor->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panelContenedor->Location = System::Drawing::Point(308, 0);
+			this->panelContenedor->Location = System::Drawing::Point(231, 0);
+			this->panelContenedor->Margin = System::Windows::Forms::Padding(2);
 			this->panelContenedor->Name = L"panelContenedor";
-			this->panelContenedor->Size = System::Drawing::Size(954, 631);
+			this->panelContenedor->Size = System::Drawing::Size(715, 513);
 			this->panelContenedor->TabIndex = 1;
+			this->panelContenedor->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MenuOpciones::panelContenedor_MouseDown);
+			this->panelContenedor->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MenuOpciones::panelContenedor_MouseMove);
+			this->panelContenedor->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MenuOpciones::panelContenedor_MouseUp);
 			// 
 			// MenuOpciones
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1262, 631);
+			this->ClientSize = System::Drawing::Size(946, 513);
 			this->Controls->Add(this->panelContenedor);
 			this->Controls->Add(this->panelLateral);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
+			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"MenuOpciones";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"MenuOpciones";
@@ -198,7 +219,7 @@ namespace ProyectoODSis {
 	}
 	private: System::Void btnDonaciones_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->AbrirPanel(gcnew ProyectoODSis::Donaciones);
-	} 
+	}
 	private: System::Void btnInventario_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->AbrirPanel(gcnew ProyectoODSis::Inventario);
 	}
@@ -207,7 +228,39 @@ namespace ProyectoODSis {
 
 	}
 	private: System::Void btnSalir_Click(System::Object^ sender, System::EventArgs^ e) {
-		Application::Exit();
+		MessageBox::Show("Salir lo hará desconectarse de su sesión ¿Está seguro que quiere salir?", "Aviso", MessageBoxButtons::YesNo, MessageBoxIcon::Warning);
+		if (DialogResult == System::Windows::Forms::DialogResult::Yes) {
+			//mysql_close(conn);
+			//TODO: Cerrar ventana, volver a login
+		}
 	}
-};
+	private: System::Void panelContenedor_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		dragging = true;
+		offset.X = e->X;
+		offset.Y = e->Y;
+	}
+	private: System::Void panelLateral_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		dragging = true;
+		offset.X = e->X;
+		offset.Y = e->Y;
+	}
+	private: System::Void panelContenedor_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		dragging = false;
+	}
+	private: System::Void panelLateral_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		dragging = false;
+	}
+	private: System::Void panelContenedor_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		if (dragging) {
+			Point currentScreenPos = PointToScreen(Point(e->X, e->Y));
+			Location = Point(currentScreenPos.X - offset.X, currentScreenPos.Y - offset.Y);
+		}
+	}
+	private: System::Void panelLateral_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		if (dragging) {
+			Point currentScreenPos = PointToScreen(Point(e->X, e->Y));
+			Location = Point(currentScreenPos.X - offset.X, currentScreenPos.Y - offset.Y);
+		}
+	}
+	};
 }

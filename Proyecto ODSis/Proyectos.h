@@ -18,9 +18,6 @@ namespace ProyectoODSis {
 		Proyectos(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: agregar código de constructor aquí
-			//
 		}
 
 	protected:
