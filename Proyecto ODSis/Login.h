@@ -1,5 +1,9 @@
 #pragma once
+
 #include "MenuOpciones.h"
+
+#include <mysql.h>
+
 namespace ProyectoODSis {
 
 	using namespace System;
@@ -8,12 +12,15 @@ namespace ProyectoODSis {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Runtime::InteropServices;
 
 	/// <summary>
 	/// Resumen de Login
 	/// </summary>
 	public ref class Login : public System::Windows::Forms::Form
 	{
+	private:
+		MYSQL* conn = mysql_init(0);
 	public:
 		Login(void)
 		{
@@ -50,7 +57,7 @@ namespace ProyectoODSis {
 		/// <summary>
 		/// Variable del diseñador necesaria.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -185,11 +192,53 @@ namespace ProyectoODSis {
 
 		}
 #pragma endregion
-	private: System::Void b_login_Click(System::Object^ sender, System::EventArgs^ e) {
-		ProyectoODSis::MenuOpciones^ menuOpciones = gcnew ProyectoODSis::MenuOpciones();
-		this->Visible = false;	
-		menuOpciones->ShowDialog();
-		this->Visible = true;
+	private: bool is_connected(MYSQL* conn) {
+		conn = mysql_real_connect(conn, "localhost", getenv("DB_USER"), getenv("DB_PASS"), getenv("DB_NAME"), 3306, NULL, 0);
+		if (!conn) {
+			MessageBox::Show("Error connecting to database!", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return false;
+		}
+		return true;
 	}
-};
+	private: int query_failed(String^ query) {
+		// Convertir la consulta SQL a una cadena de caracteres de estilo C
+		IntPtr ptr = Marshal::StringToHGlobalAnsi(query);
+		const char* cstr_query = static_cast<const char*>(ptr.ToPointer());
+		// Ejecutar la consulta
+		int qstate = mysql_query(conn, cstr_query);
+		// Liberar la memoria asignada para la cadena de caracteres de estilo C
+		Marshal::FreeHGlobal(ptr);
+		return qstate;
+	}
+	private: System::Void b_login_Click(System::Object^ sender, System::EventArgs^ e) {
+		String^ username = tb_username->Text;
+		String^ password = tb_password->Text;
+		if (String::IsNullOrWhiteSpace(username) || String::IsNullOrWhiteSpace(password)) {
+			MessageBox::Show("Ingrese su user y password", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
+		if (!is_connected(conn)) {
+			return;
+		}
+
+		String^ query = "SELECT * FROM users WHERE username='" + username + "' AND password='" + password + "'";
+		if (query_failed(query)) {
+			MessageBox::Show("Error ejecutando query", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
+
+		MYSQL_RES* res = mysql_store_result(conn);
+		if (mysql_num_rows(res) > 0) {
+			MessageBox::Show("Login exitoso", "Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
+			// Abrir el formulario principal
+			this->Hide();
+			Form^ menu = gcnew ProyectoODSis::MenuOpciones();
+			menu->ShowDialog();
+			this->Close();
+		}
+		else {
+			MessageBox::Show("Invalid username or password!", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
+	}
+	};
 }

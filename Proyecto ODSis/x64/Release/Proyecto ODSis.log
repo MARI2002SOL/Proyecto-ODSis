@@ -1,9 +1,4 @@
-﻿  Donaciones.cpp
-  Inventario.cpp
-  Login.cpp
-  MenuOpciones.cpp
-  Proyectos.cpp
-  .NETFramework,Version=v4.8.AssemblyAttributes.cpp
-  Generando código...
+﻿  Login.cpp
+C:\Users\locas\source\repos\Proyecto ODSis\Proyecto ODSis\Login.h(196,48): warning C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   Donaciones.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
-  Proyecto ODSis.vcxproj -> C:\Users\FERNANDO\source\repos\Proyecto-ODSis\x64\Release\Proyecto ODSis.exe
+  Proyecto ODSis.vcxproj -> C:\Users\locas\source\repos\Proyecto ODSis\x64\Release\Proyecto ODSis.exe
